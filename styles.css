@@ -1,0 +1,170 @@
+:root {
+    --primary-color: #e50914;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #5024D1;
+    width: 1280px;
+    height: 832px;
+}
+
+.title-container {
+    background-color: #F5F5F5;
+    padding-top: 60px;
+    padding-bottom: 60px;
+    padding-left: 100px;
+    padding-right: 100px;
+    margin-top: 60px;
+    margin-left: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Para centralizar os elementos verticalmente */
+}
+
+.title-container h1 {
+    color: #5024D1;
+    font-family: Inknut Antiqua;
+    font-size: 60px;
+    font-weight: 400px;
+    text-align: center;
+}
+
+.title-container .search-container form {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.title-container input[type="text"],
+.title-container input[type="date"] {
+    background-color: #5024D1;
+    padding: 10px;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    color: white; /* Define a cor do texto nos campos */
+    margin-right: 40px;
+    border-radius: 5px;
+}
+
+.title-container input[type="text"]::placeholder,
+.title-container input[type="date"]::placeholder {
+    color: white; /* Define a cor do texto de placeholder */
+}
+
+.title-container input[type="submit"] {
+    background-color: #5024D1;
+    color: white;
+    border-radius: 5px;
+    padding: 12px 30px;
+    cursor: pointer;
+}
+
+img {
+    max-width: 100%; /* Define a largura máxima da imagem para se ajustar ao contêiner */
+    height: auto; /* Mantém a proporção de aspecto da imagem */
+    margin-top: 50px; /* Adiciona margem superior para espaçamento */
+    margin-left: 240px;
+}
+
+.viagem {
+    background-color: #F5F5F5;
+    margin-top: 70px;
+    margin-left: 220px;
+    width: 1060px;
+    padding: 10px;
+}
+
+.viagem p {
+    color: white; /* Cor do texto dentro da classe .viagem */
+    margin-right: 10px;
+}
+
+.viagem input[type='submit']{
+    background-color: #F5F5F5;
+    color: #5024D1;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    padding: 12px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.corpo {
+    background-color: #5024D1;
+    padding: 20px; /* Ajuste conforme necessário */
+    margin: 10px; /* Ajuste conforme necessário */
+    display: flex;
+    justify-content: space-between; /* Distribui os elementos horizontalmente */
+    align-items: center;
+}
+
+.compra {
+    background-color: #F5F5F5;
+    margin-top: 70px;
+    margin-left: 220px;
+    width: 1060px;
+    padding: 10px;
+    display: flex;
+}
+
+.compra .search {
+    flex: 1; /* Ocupa o espaço disponível */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compra img {
+    margin-right: 250px;
+    width: 250px;
+}
+
+.compra h1 {
+    color: #5024D1;
+    font-family: Inknut Antiqua;
+    font-size: 60px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.compra form {
+    margin-top: 25px;    
+    margin-right: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.compra input[type="text"] {
+    background-color: #5024D1;
+    padding: 10px;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    color: white;
+    margin-bottom: 10px; /* Adicionado margin-bottom para espaçamento entre os campos */
+    border: none;
+    border-radius: 5px;
+}
+
+.compra input[type="text"]::placeholder {
+    color: white;
+}
+
+.compra input[type="submit"] {
+    background-color: #5024D1;
+    color: white;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
