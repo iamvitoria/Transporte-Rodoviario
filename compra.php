@@ -25,7 +25,7 @@
 
     <div class="compra">
         <div class="search">
-            <img src="C:\Users\vitor\Documents\Trabalho\onibus.png" alt="Onibus"> 
+            <img src="C:\xampp\htdocs\Transporte-Rodoviario\onibus.png" alt="Onibus"> 
                 <form id="formCompra">
                     <input type="text" id="nome" name="nome" placeholder="Nome">
                     <input type="text" id="RG" name="RG" placeholder="RG">
