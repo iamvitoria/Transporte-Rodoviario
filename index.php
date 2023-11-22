@@ -22,6 +22,7 @@
         </div>
     </div>
 
+    <img src="viagem.webp" alt="viagem">
 
     <script>
         function redirecionarCompra() {
