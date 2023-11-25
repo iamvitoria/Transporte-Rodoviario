@@ -12,11 +12,16 @@
             <h1>TRANSPORTE RODOVIÁRIO</h1>
         </div>
         <div class="search-container">
-            <form id="formBusca">
-                <input type="text" id="origem" name="origem" placeholder="Origem">
-                <input type="text" id="destino" name="destino" placeholder="Destino">
-                <input type="date" id="ida" name="ida" placeholder="Data de Ida">
-                <input type="date" id="volta" name="volta" placeholder="Data de Volta">
+            <form id="formBusca" method="post" action="">
+                <select id="origem" name="origem">
+                    <?php echo obterOpcoesCidades(); ?>
+                </select>
+
+                <select id="destino" name="destino">
+                    <?php echo obterOpcoesCidades(); ?>
+                </select>
+                <input type="date" id="ida" name="data_inicio" placeholder="Data de Ida">
+                <input type="date" id="volta" name="data_fim" placeholder="Data de Volta">
                 <input type="submit" value="Buscar">
             </form>
         </div>
@@ -33,17 +38,19 @@
         } 
 
         // Consulte o banco de dados para obter as viagens e os nomes das cidades
-        $result = $mysqli->query("SELECT viagem.*, cidade.Nome AS cidade_nome FROM viagem JOIN cidade ON viagem.cidade_ID = cidade.ID");
+        $result = $mysqli->query("SELECT viagem.*, origem.Nome AS cidade_origem, destino.Nome AS cidade_destino FROM viagem 
+                                  JOIN cidade AS origem ON viagem.cidade_origem_ID = origem.ID
+                                  JOIN cidade AS destino ON viagem.cidade_destino_ID = destino.ID");
 
         // Verifique se a consulta foi bem-sucedida
         if ($result->num_rows > 0) {
             // Saída dos dados de cada linha
             while($row = $result->fetch_assoc()) {
                 echo '<div class="corpo">';
-                echo '<p>Destino: ' . $row['cidade_nome'] . '</p>'; // Agora exibe o nome da cidade
+                echo '<p>Origem: ' . $row['cidade_origem'] . '</p>';
+                echo '<p>Destino: ' . $row['cidade_destino'] . '</p>';
                 echo '<p>Saída: ' . $row['Saida'] . '</p>';
                 echo '<p>Chegada: ' . $row['Chegada'] . '</p>';
-                // Você precisará juntar a tabela 'passagem' para obter o preço da passagem
                 echo '<input type="submit" value="Selecionar" onclick="redirecionarCompra()">';
                 echo '</div>';
             }
@@ -57,9 +64,39 @@
 
     <script>
         function redirecionarCompra() {
-            // Redireciona para a página de compra (substitua "compra.html" pelo caminho correto)
             window.location.href = "compra.php";
         }
     </script>
+
+    <?php
+    // Função para obter opções de cidades do banco de dados
+    function obterOpcoesCidades() {
+        // Conectar ao banco de dados
+        $mysqli = new mysqli('localhost', 'root', '', 'onibus');
+
+        // Verificar a conexão
+        if ($mysqli->connect_error) {
+            die("Falha na conexão: " . $mysqli->connect_error);
+        } 
+
+        // Consultar cidades disponíveis
+        $result = $mysqli->query("SELECT * FROM cidade");
+
+        // Verificar se a consulta foi bem-sucedida
+        if ($result->num_rows > 0) {
+            // Construir as opções
+            $options = "";
+            while($row = $result->fetch_assoc()) {
+                $options .= '<option value="' . $row['ID'] . '">' . $row['Nome'] . '</option>';
+            }
+
+            return $options;
+        } else {
+            return '<option value="" disabled>Nenhuma cidade disponível</option>';
+        }
+
+        $mysqli->close();
+    }
+    ?>
 </body>
 </html>

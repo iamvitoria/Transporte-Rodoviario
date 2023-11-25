@@ -13,8 +13,14 @@
         </div>
         <div class="search-container">
             <form id="formBusca" method="post" action="">
-                <input type="text" id="origem" name="origem" placeholder="Origem">
-                <input type="text" id="destino" name="destino" placeholder="Destino">
+                <select id="origem" name="origem">
+                    <?php echo obterOpcoesCidades(); ?>
+                </select>
+
+                <select id="destino" name="destino">
+                    <?php echo obterOpcoesCidades(); ?>
+                </select>
+
                 <input type="date" id="ida" name="data_inicio" placeholder="Data de Ida">
                 <input type="date" id="volta" name="data_fim" placeholder="Data de Volta">
                 <input type="submit" value="Buscar">
@@ -25,10 +31,41 @@
     <img src="viagem.webp" alt="viagem">
 
     <script>
-        function redirecionarCompra() {
-            // Redireciona para a página de compra (substitua "compra.php" pelo caminho correto)
+        document.getElementById('formBusca').addEventListener('submit', function(e) {
+            e.preventDefault();
             window.location.href = "viagem.php";
-        }
+        });
     </script>
+
+    <?php
+    // Função para obter opções de cidades do banco de dados
+    function obterOpcoesCidades() {
+        // Conectar ao banco de dados
+        $mysqli = new mysqli('localhost', 'root', '', 'onibus');
+
+        // Verificar a conexão
+        if ($mysqli->connect_error) {
+            die("Falha na conexão: " . $mysqli->connect_error);
+        } 
+
+        // Consultar cidades disponíveis
+        $result = $mysqli->query("SELECT * FROM cidade");
+
+        // Verificar se a consulta foi bem-sucedida
+        if ($result->num_rows > 0) {
+            // Construir as opções
+            $options = "";
+            while($row = $result->fetch_assoc()) {
+                $options .= '<option value="' . $row['ID'] . '">' . $row['Nome'] . '</option>';
+            }
+
+            return $options;
+        } else {
+            return '<option value="" disabled>Nenhuma cidade disponível</option>';
+        }
+
+        $mysqli->close();
+    }
+    ?>
 </body>
 </html>
