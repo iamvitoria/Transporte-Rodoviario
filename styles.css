@@ -9,31 +9,23 @@
 }
 
 body {
-    background: #5024D1;
-    width: 1280px;
-    height: 832px;
+    background: #F5F5F5;
 }
 
 .title-container {
     background-color: #F5F5F5;
-    padding-top: 60px;
-    padding-bottom: 60px;
-    padding-left: 100px;
-    padding-right: 100px;
-    margin-top: 60px;
-    margin-left: 220px;
-    margin-bottom: 10px;
+    padding: 60px 100px; /* Ajuste conforme necessário */
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; /* Para centralizar os elementos verticalmente */
+    flex-direction: column;
 }
 
 .title-container h1 {
     color: #5024D1;
     font-family: Inknut Antiqua;
     font-size: 60px;
-    font-weight: 400px;
+    font-weight: 400;
     text-align: center;
 }
 
@@ -51,14 +43,14 @@ body {
     padding: 10px;
     font-family: Inknut Antiqua;
     font-size: 15px;
-    color: white; /* Define a cor do texto nos campos */
+    color: white;
     margin-right: 40px;
     border-radius: 5px;
 }
 
 .title-container input[type="text"]::placeholder,
 .title-container input[type="date"]::placeholder {
-    color: white; /* Define a cor do texto de placeholder */
+    color: white;
 }
 
 .title-container input[type="submit"] {
@@ -97,130 +89,32 @@ body {
 }
 
 img {
-    max-width: 100%; /* Define a largura máxima da imagem para se ajustar ao contêiner */
-    height: auto; /* Mantém a proporção de aspecto da imagem */
-    margin-top: 50px; /* Adiciona margem superior para espaçamento */
+    max-width: 100%;
+    height: auto;
+    margin-top: 50px;
     margin-left: 240px;
 }
 
-.viagem {
+.viagem, .compra {
     background-color: #F5F5F5;
     margin-top: 70px;
     margin-left: 220px;
-    width: 1060px;
+    width: calc(100% - 440px); /* Ajuste conforme necessário */
     padding: 10px;
 }
 
 .viagem p {
-    color: white; /* Cor do texto dentro da classe .viagem */
+    color: white;
     margin-right: 10px;
 }
 
-.viagem input[type='submit']{
+.viagem input[type='submit'],
+.compra input[type='submit'] {
     background-color: #F5F5F5;
     color: #5024D1;
     font-family: Inknut Antiqua;
     font-size: 15px;
     padding: 12px 30px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.corpo {
-    background-color: #5024D1;
-    padding: 20px; /* Ajuste conforme necessário */
-    margin: 10px; /* Ajuste conforme necessário */
-    display: flex;
-    justify-content: space-between; /* Distribui os elementos horizontalmente */
-    align-items: center;
-}
-
-.compra {
-    background-color: #F5F5F5;
-    margin-top: 70px;
-    margin-left: 220px;
-    width: 1060px;
-    padding: 10px;
-    display: flex;
-}
-
-.compra .search {
-    flex: 1; /* Ocupa o espaço disponível */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.compra img {
-    margin-right: 250px;
-    width: 250px;
-}
-
-.compra h1 {
-    color: #5024D1;
-    font-family: Inknut Antiqua;
-    font-size: 60px;
-    font-weight: 400;
-    text-align: center;
-}
-
-.compra form {
-    margin-top: 25px;    
-    margin-right: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.compra input[type="text"] {
-    background-color: #5024D1;
-    padding: 10px;
-    font-family: Inknut Antiqua;
-    font-size: 15px;
-    color: white;
-    margin-bottom: 10px; /* Adicionado margin-bottom para espaçamento entre os campos */
-    border: none;
-    border-radius: 5px;
-}
-
-.compra input[type="text"]::placeholder {
-    color: white;
-}
-
-/* Estilos para o select */
-.compra select {
-    width: 100%; /* Define a largura como 100% para igualar ao input */
-    padding: 10px;
-    font-family: Inknut Antiqua;
-    font-size: 15px;
-    color: white;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #5024D1;
-    appearance: none; /* Remove as setas padrão nos navegadores */
-    cursor: pointer;
-}
-
-/* Estilos para as opções do select */
-.compra select option {
-    background-color: #5024D1;
-    color: white;
-}
-
-/* Estilo para a opção selecionada */
-.compra select option:checked {
-    background-color: #F5F5F5;
-    color: #5024D1;
-}
-
-.compra input[type="submit"] {
-    background-color: #5024D1;
-    color: white;
-    font-family: Inknut Antiqua;
-    font-size: 15px;
-    padding: 12px 30px;
-    border: none;
     border-radius: 5px;
     cursor: pointer;
 }

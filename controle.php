@@ -1,17 +1,14 @@
 <?php
-/* Recebe os parâmetros da viagem selecionada (origem, destino, data de ida e de volta) da página index.php.
-Exibe detalhes da viagem e informações sobre os descontos aplicáveis.
-Permite ao usuário escolher a quantidade de passagens e efetuar a compra.
-Após a compra, gera bilhetes e atualiza o banco de dados com as informações da compra. */
+/* Exibe uma lista de passagens emitidas, talvez filtráveis por data, origem, destino, etc.
+Permite realizar operações de controle, como cancelamento de passagens. */
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transporte Rodoviário</title>
+    <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <style>
+ <style>
         .dropdown {
             position: relative;
             display: inline-block;
@@ -50,16 +47,15 @@ Após a compra, gera bilhetes e atualiza o banco de dados com as informações d
 </head>
 <body>
     <div class="dropdown">
-        <button class="dropbtn">MENU</button>
-        <div class="dropdown-content">
-            <a href="index.php">Início</a>
-            <a href="viagem.php">Viagem</a>
-            <a href="controle.php">Controle</a>
-            <a href="compra.php">Compra</a>
-            <a href="admin.php">Admin</a>
-        </div>
+    <button class="dropbtn">MENU</button>
+      <div class="dropdown-content">
+        <a href="index.php">Início</a>
+        <a href="viagem.php">Viagem</a>
+        <a href="controle.php">Controle</a>
+        <a href="compra.php">Compra</a>
+        <a href="admin.php">Admin</a>
+      </div>
     </div>
-
     <div class="title-container">
         <div class="title">
             <h1>TRANSPORTE RODOVIÁRIO</h1>
@@ -90,40 +86,31 @@ Após a compra, gera bilhetes e atualiza o banco de dados com as informações d
             die("Falha na conexão: " . $mysqli->connect_error);
         } 
 
-        // Consulte o banco de dados para obter as viagens e os nomes das cidades
-        $result = $mysqli->query("SELECT 
-                            v.saida AS Saida,
-                            v.chegada AS Chegada,
-                            o.Modelo AS ModeloOnibus,
-                            o.Poltrona AS PoltronaOnibus,
-                            c_origem.Nome AS CidadeOrigem,
-                            c_destino.Nome AS CidadeDestino,
-                            v.horario AS Horario,
-                            cp.Nome AS CidadeParada
-                          FROM viagem v
-                          JOIN cidade c_origem ON v.cidade_origem = c_origem.ID
-                          JOIN cidade c_destino ON v.cidade_destino = c_destino.ID
-                          JOIN onibus o ON v.Onibus_ID = o.ID
-                          LEFT JOIN parada p ON v.parada_id = p.ID
-                          LEFT JOIN cidade cp ON p.cidade_ID = cp.ID");
+        // Consulte o banco de dados para obter as passagens e os nomes das cidades
+        $result = $mysqli->query("SELECT passagem.*, 
+                          cidade_origem.Nome AS cidade_origem, 
+                          cidade_destino.Nome AS cidade_destino 
+                          FROM passagem 
+                          LEFT JOIN viagem ON passagem.viagem_ID = viagem.ID
+                          LEFT JOIN cidade AS cidade_origem ON viagem.cidade_origem = cidade_origem.ID
+                          LEFT JOIN cidade AS cidade_destino ON viagem.cidade_destino = cidade_destino.ID");
+
 
         // Verifique se a consulta foi bem-sucedida
-        if ($result->num_rows > 0) {
+        if ($result && $result->num_rows > 0) {
             // Saída dos dados de cada linha
             while($row = $result->fetch_assoc()) {
                 echo '<div class="corpo">';
-                echo '<p>Origem: ' . $row['CidadeOrigem'] . '</p>';
-                echo '<p>Destino: ' . $row['CidadeDestino'] . '</p>';
-                echo '<p>Saída: ' . $row['Saida'] . '</p>';
-                echo '<p>Chegada: ' . $row['Chegada'] . '</p>';
-                echo '<p>Ônibus: ' . $row['ModeloOnibus'] . ' (Poltrona ' . $row['PoltronaOnibus'] . ')</p>';
-                echo '<p>Horário: ' . $row['Horario'] . '</p>';
-                echo '<p>Parada: ' . $row['CidadeParada'] . '</p>';
-                echo '<input type="submit" value="Selecionar" onclick="redirecionarCompra()">';
+                echo '<p>Assento: ' . $row['Assento'] . '</p>';
+                echo '<p>Preço: ' . $row['Preco'] . '</p>';
+                echo '<p>Passageiro: ' . $row['compra_passageiro_ID'] . '</p>';
+                echo '<p>Cidade de Origem: ' . $row['cidade_origem'] . '</p>';
+                echo '<p>Cidade de Destino: ' . $row['cidade_destino'] . '</p>';
+                echo '<input type="submit" value="Cancelar" onclick="cancelarPassagem(' . $row['ID'] . ')">';
                 echo '</div>';
             }
         } else {
-            echo "Nenhuma viagem disponível";
+            echo "Nenhuma passagem disponível ou erro na consulta: " . $mysqli->error;
         }
 
         $mysqli->close();
@@ -131,8 +118,9 @@ Após a compra, gera bilhetes e atualiza o banco de dados com as informações d
     </div>
 
     <script>
-        function redirecionarCompra() {
-            window.location.href = "compra.php";
+        function cancelarPassagem(passagemID) {
+            // Adicione aqui a lógica para cancelar a passagem no lado do cliente ou chame uma função no backend
+            alert("Passagem com ID " + passagemID + " cancelada com sucesso!");
         }
     </script>
 
@@ -140,7 +128,7 @@ Após a compra, gera bilhetes e atualiza o banco de dados com as informações d
     // Função para obter opções de cidades do banco de dados
     function obterOpcoesCidades() {
         // Conectar ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'onibus');
+        $mysqli = new mysqli('localhost', 'root', '', 'test');
 
         // Verificar a conexão
         if ($mysqli->connect_error) {

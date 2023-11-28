@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/11/2023 às 17:46
+-- Tempo de geração: 28/11/2023 às 17:41
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `onibus`
+-- Banco de dados: `test`
 --
 
 -- --------------------------------------------------------
@@ -31,6 +31,14 @@ CREATE TABLE `cidade` (
   `ID` int(11) NOT NULL,
   `Nome` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Despejando dados para a tabela `cidade`
+--
+
+INSERT INTO `cidade` (`ID`, `Nome`) VALUES
+(1, 'Belo Horizonte'),
+(2, 'Ouro Preto');
 
 -- --------------------------------------------------------
 
@@ -70,6 +78,14 @@ CREATE TABLE `onibus` (
   `Poltrona` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Despejando dados para a tabela `onibus`
+--
+
+INSERT INTO `onibus` (`ID`, `Modelo`, `Poltrona`) VALUES
+(1, 'comum', 2),
+(2, 'executivo', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -81,6 +97,14 @@ CREATE TABLE `parada` (
   `Horario` time DEFAULT NULL,
   `cidade_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Despejando dados para a tabela `parada`
+--
+
+INSERT INTO `parada` (`ID`, `Horario`, `cidade_ID`) VALUES
+(1, '14:32:23', 1),
+(2, '18:32:23', 2);
 
 -- --------------------------------------------------------
 
@@ -111,18 +135,30 @@ CREATE TABLE `passagem` (
   `viagem_cidade_destino` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+-- --------------------------------------------------------
+
 --
 -- Estrutura para tabela `viagem`
 --
 
 CREATE TABLE `viagem` (
   `ID` int(11) NOT NULL,
-  `Saida` time DEFAULT NULL,
-  `Chegada` time DEFAULT NULL,
+  `saida` date DEFAULT NULL,
+  `chegada` date DEFAULT NULL,
   `Onibus_ID` int(11) NOT NULL,
   `cidade_origem` int(11) NOT NULL,
-  `cidade_destino` int(11) NOT NULL
+  `cidade_destino` int(11) NOT NULL,
+  `horario` time DEFAULT NULL,
+  `parada_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Despejando dados para a tabela `viagem`
+--
+
+INSERT INTO `viagem` (`ID`, `saida`, `chegada`, `Onibus_ID`, `cidade_origem`, `cidade_destino`, `horario`, `parada_id`) VALUES
+(1, '2023-11-28', '2023-11-29', 1, 1, 2, '13:35:46', 1),
+(2, '2023-11-29', '2023-11-30', 2, 2, 1, '15:34:46', 2);
 
 -- --------------------------------------------------------
 
@@ -222,8 +258,8 @@ CREATE TABLE `vw_passagem` (
 --
 CREATE TABLE `vw_viagem` (
 `ID` int(11)
-,`Saida` time
-,`Chegada` time
+,`Saida` date
+,`Chegada` date
 ,`Onibus_ID` int(11)
 ,`cidade_origem` int(11)
 ,`cidade_destino` int(11)
@@ -263,7 +299,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_onibus`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_onibus`  AS SELECT `ID` AS `ID`, `Modelo` AS `Modelo`, `Poltrona` AS `Poltrona` FROM `onibus` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_onibus`  AS SELECT `onibus`.`ID` AS `ID`, `onibus`.`Modelo` AS `Modelo`, `onibus`.`Poltrona` AS `Poltrona` FROM `onibus` ;
 
 -- --------------------------------------------------------
 
@@ -299,7 +335,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vw_viagem`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_viagem`  AS SELECT `viagem`.`ID` AS `ID`, `viagem`.`Saida` AS `Saida`, `viagem`.`Chegada` AS `Chegada`, `viagem`.`Onibus_ID` AS `Onibus_ID`, `viagem`.`cidade_origem` AS `cidade_origem`, `viagem`.`cidade_destino` AS `cidade_destino` FROM `viagem` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_viagem`  AS SELECT `viagem`.`ID` AS `ID`, `viagem`.`saida` AS `Saida`, `viagem`.`chegada` AS `Chegada`, `viagem`.`Onibus_ID` AS `Onibus_ID`, `viagem`.`cidade_origem` AS `cidade_origem`, `viagem`.`cidade_destino` AS `cidade_destino` FROM `viagem` ;
 
 --
 -- Índices para tabelas despejadas
@@ -347,7 +383,8 @@ ALTER TABLE `passagem`
 --
 ALTER TABLE `viagem`
   ADD PRIMARY KEY (`ID`,`cidade_origem`,`cidade_destino`),
-  ADD KEY `fk_viagem_Onibus1_idx` (`Onibus_ID`);
+  ADD KEY `fk_viagem_Onibus1_idx` (`Onibus_ID`),
+  ADD KEY `FK_viagem_parada` (`parada_id`);
 
 --
 -- AUTO_INCREMENT para tabelas despejadas
@@ -357,19 +394,19 @@ ALTER TABLE `viagem`
 -- AUTO_INCREMENT de tabela `onibus`
 --
 ALTER TABLE `onibus`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `parada`
 --
 ALTER TABLE `parada`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `viagem`
 --
 ALTER TABLE `viagem`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restrições para tabelas despejadas
@@ -385,6 +422,7 @@ ALTER TABLE `parada`
 -- Restrições para tabelas `viagem`
 --
 ALTER TABLE `viagem`
+  ADD CONSTRAINT `FK_viagem_parada` FOREIGN KEY (`parada_id`) REFERENCES `parada` (`ID`),
   ADD CONSTRAINT `fk_viagem_Onibus1` FOREIGN KEY (`Onibus_ID`) REFERENCES `onibus` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 

@@ -1,3 +1,8 @@
+<?php
+/* Responsável por exibir um formulário de busca de viagens com campos como origem, destino, data de ida, data de volta, etc.
+Exibe os resultados da busca, mostrando informações sobre as viagens disponíveis.
+Possui links ou botões para redirecionar para a página de viagem.php com os parâmetros da viagem selecionada. */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,20 +10,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transporte Rodoviário</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            display: block;
+            color: black;
+            text-decoration: none;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropbtn {
+            margin-left: 10px;
+            margin-top: 10px;
+            color: #5024D1;
+            padding: 16px;
+            border: none;
+            cursor: pointer;
+            margin-right: 100px;
+            background: #F5F5F5; 
+            border-radius: 5px; 
+        }
+    </style>
 </head>
 <body>
+    <div class="dropdown">
+    <button class="dropbtn">MENU</button>
+      <div class="dropdown-content">
+        <a href="index.php">Início</a>
+        <a href="viagem.php">Viagem</a>
+        <a href="controle.php">Controle</a>
+        <a href="compra.php">Compra</a>
+        <a href="admin.php">Admin</a>
+      </div>
+    </div>
+
     <div class="title-container">
         <div class="title">
             <h1>TRANSPORTE RODOVIÁRIO</h1>
         </div>
         <div class="search-container">
-            <form id="formBusca" method="post" action="">
+            <form id="formBusca" method="get" action="viagem.php">
                 <select id="origem" name="origem">
-                    <?php echo obterOpcoesCidades(); ?>
+                    <?php echo obterOpcoesCidades('origem'); ?>
                 </select>
 
                 <select id="destino" name="destino">
-                    <?php echo obterOpcoesCidades(); ?>
+                    <?php echo obterOpcoesCidades('destino'); ?>
                 </select>
 
                 <input type="date" id="ida" name="data_inicio" placeholder="Data de Ida">
@@ -30,18 +82,11 @@
 
     <img src="viagem.webp" alt="viagem">
 
-    <script>
-        document.getElementById('formBusca').addEventListener('submit', function(e) {
-            e.preventDefault();
-            window.location.href = "viagem.php";
-        });
-    </script>
-
     <?php
     // Função para obter opções de cidades do banco de dados
-    function obterOpcoesCidades() {
+    function obterOpcoesCidades($tipo) {
         // Conectar ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'onibus');
+        $mysqli = new mysqli('localhost', 'root', '', 'test');
 
         // Verificar a conexão
         if ($mysqli->connect_error) {
