@@ -7,7 +7,7 @@
     <title>Transporte Rodoviário</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="styles.css">
- <style>
+    <style>
         .dropdown {
             position: relative;
             display: inline-block;
@@ -31,6 +31,7 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
         .dropbtn {
             margin-left: 10px;
             margin-top: 10px;
@@ -46,14 +47,14 @@
 </head>
 <body>
     <div class="dropdown">
-    <button class="dropbtn">MENU</button>
-      <div class="dropdown-content">
-        <a href="index.php">Início</a>
-        <a href="viagem.php">Viagem</a>
-        <a href="controle.php">Controle</a>
-        <a href="compra.php">Compra</a>
-        <a href="admin.php">Admin</a>
-      </div>
+        <button class="dropbtn">MENU</button>
+        <div class="dropdown-content">
+            <a href="index.php">Início</a>
+            <a href="viagem.php">Viagem</a>
+            <a href="controle.php">Controle</a>
+            <a href="compra.php">Compra</a>
+            <a href="admin.php">Admin</a>
+        </div>
     </div>
     <div class="title-container">
         <div class="title">
@@ -75,43 +76,54 @@
         </div>
     </div>
 
-    <div class="viagem">
-        <?php
-        // Conecte-se ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
+    <div class="adicionar-viagem">
+        <h2>Adicionar Nova Viagem</h2>
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="origem_nova">Origem:</label>
+                <select id="origem_nova" name="origem_nova">
+                    <?php echo obterOpcoesCidades(); ?>
+                </select>
+            </div>
 
-        // Verifique a conexão
-        if ($mysqli->connect_error) {
-            die("Falha na conexão: " . $mysqli->connect_error);
-        } 
+            <div class="form-group">
+                <label for="destino_nova">Destino:</label>
+                <select id="destino_nova" name="destino_nova">
+                    <?php echo obterOpcoesCidades(); ?>
+                </select>
+            </div>
 
-        // Consulte o banco de dados para obter as passagens e os nomes das cidades
-        $result = $mysqli->query("SELECT passagem.*, 
-                                  viagem.cidade_origem AS cidade_origem, 
-                                  viagem.cidade_destino AS cidade_destino 
-                                  FROM passagem 
-                                  JOIN viagem ON passagem.viagem_ID = viagem.ID");
+            <div class="form-group">
+                <label for="saida">Saída:</label>
+                <input type="datetime-local" id="saida" name="saida" required>
+            </div>
 
-        // Verifique se a consulta foi bem-sucedida
-        if ($result->num_rows > 0) {
-            // Saída dos dados de cada linha
-            while($row = $result->fetch_assoc()) {
-                echo '<div class="corpo">';
-                echo '<p>Assento: ' . $row['Assento'] . '</p>';
-                echo '<p>Preço: ' . $row['Preco'] . '</p>';
-                echo '<p>Passageiro: ' . $row['compra_passageiro_ID'] . '</p>';
-                echo '<p>Cidade de Origem: ' . $row['cidade_origem'] . '</p>';
-                echo '<p>Cidade de Destino: ' . $row['cidade_destino'] . '</p>';
-                echo '<input type="submit" value="Editar" onclick="redirecionarCompra()">';
-                echo '<input type="submit" value="Excluir" onclick="redirecionarCompra()">';
-                echo '</div>';
-            }
-        } else {
-            echo "Nenhuma passagem disponível";
-        }
+            <div class="form-group">
+                <label for="chegada">Chegada:</label>
+                <input type="datetime-local" id="chegada" name="chegada" required>
+            </div>
 
-        $mysqli->close();
-        ?>
+            <div class="form-group">
+                <label for="horario">Horário:</label>
+                <input type="time" id="horario" name="horario" required>
+            </div>
+
+            <div class="form-group">
+                <label for="parada">Parada:</label>
+                <select id="parada" name="parada">
+                    <?php echo obterOpcoesCidades(); ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="onibus">Ônibus:</label>
+                <select id="onibus" name="onibus" required>
+                    <?php echo obterOpcoesOnibus(); ?>
+                </select>
+            </div>
+
+            <input type="submit" name="adicionar_viagem" value="Adicionar Viagem">
+        </form>
     </div>
 
     <script>
@@ -121,10 +133,41 @@
     </script>
 
     <?php
+    // Processar o formulário de adição de viagem
+    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['adicionar_viagem'])) {
+        // Obter os dados do formulário
+        $origem_nova = $_POST['origem_nova'];
+        $destino_nova = $_POST['destino_nova'];
+        $saida = $_POST['saida'];
+        $chegada = $_POST['chegada'];
+        $horario = $_POST['horario'];
+        $parada = $_POST['parada'];
+        $onibus = $_POST['onibus'];
+
+        // Conectar ao banco de dados
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
+
+        // Verificar a conexão
+        if ($mysqli->connect_error) {
+            die("Falha na conexão: " . $mysqli->connect_error);
+        }
+
+        // Inserir a nova viagem no banco de dados
+        $inserir_viagem_query = "INSERT INTO viagem (cidade_origem, cidade_destino, saida, chegada, horario, parada_id, Onibus_ID) VALUES ('$origem_nova', '$destino_nova', '$saida', '$chegada', '$horario', '$parada', '$onibus')";
+
+        if ($mysqli->query($inserir_viagem_query)) {
+            echo "Viagem adicionada com sucesso.";
+        } else {
+            echo "Erro ao adicionar a viagem: " . $mysqli->error;
+        }
+
+        $mysqli->close();
+    }
+
     // Função para obter opções de cidades do banco de dados
     function obterOpcoesCidades() {
         // Conectar ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'onibus');
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
 
         // Verificar a conexão
         if ($mysqli->connect_error) {
@@ -145,6 +188,33 @@
             return $options;
         } else {
             return '<option value="" disabled>Nenhuma cidade disponível</option>';
+        }
+
+        $mysqli->close();
+    }
+    function obterOpcoesOnibus() {
+        // Conectar ao banco de dados
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
+
+        // Verificar a conexão
+        if ($mysqli->connect_error) {
+            die("Falha na conexão: " . $mysqli->connect_error);
+        } 
+
+        // Consultar ônibus disponíveis
+        $result = $mysqli->query("SELECT * FROM onibus");
+
+        // Verificar se a consulta foi bem-sucedida
+        if ($result->num_rows > 0) {
+            // Construir as opções
+            $options = "";
+            while($row = $result->fetch_assoc()) {
+                $options .= '<option value="' . $row['ID'] . '">' . $row['Modelo'] . ' (Poltrona ' . $row['Poltrona'] . ')</option>';
+            }
+
+            return $options;
+        } else {
+            return '<option value="" disabled>Nenhum ônibus disponível</option>';
         }
 
         $mysqli->close();

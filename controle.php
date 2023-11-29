@@ -1,14 +1,10 @@
-<?php
-/* Exibe uma lista de passagens emitidas, talvez filtráveis por data, origem, destino, etc.
-Permite realizar operações de controle, como cancelamento de passagens. */
-?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Transporte Rodoviário</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="styles.css">
- <style>
+    <style>
         .dropdown {
             position: relative;
             display: inline-block;
@@ -47,14 +43,14 @@ Permite realizar operações de controle, como cancelamento de passagens. */
 </head>
 <body>
     <div class="dropdown">
-    <button class="dropbtn">MENU</button>
-      <div class="dropdown-content">
-        <a href="index.php">Início</a>
-        <a href="viagem.php">Viagem</a>
-        <a href="controle.php">Controle</a>
-        <a href="compra.php">Compra</a>
-        <a href="admin.php">Admin</a>
-      </div>
+        <button class="dropbtn">MENU</button>
+        <div class="dropdown-content">
+            <a href="index.php">Início</a>
+            <a href="viagem.php">Viagem</a>
+            <a href="controle.php">Controle</a>
+            <a href="compra.php">Compra</a>
+            <a href="admin.php">Admin</a>
+        </div>
     </div>
     <div class="title-container">
         <div class="title">
@@ -79,22 +75,55 @@ Permite realizar operações de controle, como cancelamento de passagens. */
     <div class="viagem">
         <?php
         // Conecte-se ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'test');
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
 
         // Verifique a conexão
         if ($mysqli->connect_error) {
             die("Falha na conexão: " . $mysqli->connect_error);
         } 
 
-        // Consulte o banco de dados para obter as passagens e os nomes das cidades
-        $result = $mysqli->query("SELECT passagem.*, 
+        // Verifique se o formulário foi enviado e se uma passagem deve ser excluída
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['excluir_passagem'])) {
+            $passagem_id = $_POST['passagem_id'];
+
+            // Execute a consulta para excluir a passagem
+            $delete_query = "DELETE FROM passagem WHERE ID = $passagem_id";
+            if ($mysqli->query($delete_query)) {
+                echo "Passagem excluída com sucesso.";
+            } else {
+                echo "Erro ao excluir a passagem: " . $mysqli->error;
+            }
+        }
+
+        // Construa a consulta SQL com base nos filtros do formulário
+        $query = "SELECT passagem.*, 
                           cidade_origem.Nome AS cidade_origem, 
                           cidade_destino.Nome AS cidade_destino 
                           FROM passagem 
                           LEFT JOIN viagem ON passagem.viagem_ID = viagem.ID
                           LEFT JOIN cidade AS cidade_origem ON viagem.cidade_origem = cidade_origem.ID
-                          LEFT JOIN cidade AS cidade_destino ON viagem.cidade_destino = cidade_destino.ID");
+                          LEFT JOIN cidade AS cidade_destino ON viagem.cidade_destino = cidade_destino.ID
+                          WHERE 1"; // Condição sempre verdadeira para incluir todas as passagens
 
+        // Adicione condições com base nos filtros do formulário
+        if (!empty($_POST['origem'])) {
+            $query .= " AND viagem.cidade_origem = " . intval($_POST['origem']);
+        }
+
+        if (!empty($_POST['destino'])) {
+            $query .= " AND viagem.cidade_destino = " . intval($_POST['destino']);
+        }
+
+        if (!empty($_POST['data_inicio'])) {
+            $query .= " AND passagem.data >= '" . $_POST['data_inicio'] . "'";
+        }
+
+        if (!empty($_POST['data_fim'])) {
+            $query .= " AND passagem.data <= '" . $_POST['data_fim'] . "'";
+        }
+
+        // Execute a consulta
+        $result = $mysqli->query($query);
 
         // Verifique se a consulta foi bem-sucedida
         if ($result && $result->num_rows > 0) {
@@ -104,9 +133,13 @@ Permite realizar operações de controle, como cancelamento de passagens. */
                 echo '<p>Assento: ' . $row['Assento'] . '</p>';
                 echo '<p>Preço: ' . $row['Preco'] . '</p>';
                 echo '<p>Passageiro: ' . $row['compra_passageiro_ID'] . '</p>';
-                echo '<p>Cidade de Origem: ' . $row['cidade_origem'] . '</p>';
-                echo '<p>Cidade de Destino: ' . $row['cidade_destino'] . '</p>';
-                echo '<input type="submit" value="Cancelar" onclick="cancelarPassagem(' . $row['ID'] . ')">';
+                echo '<p>Origem: ' . $row['viagem_cidade_origem'] . '</p>';
+                echo '<p>Destino: ' . $row['viagem_cidade_destino'] . '</p>';
+                echo '<form method="post" action="">';
+                echo '<input type="hidden" name="passagem_id" value="' . $row['ID'] . '">';
+                echo '<input type="submit" name="excluir_passagem" value="Excluir">';
+                echo '<input type="submit" name="alterar_passagem" value="Alterar">';
+                echo '</form>';
                 echo '</div>';
             }
         } else {
@@ -117,18 +150,11 @@ Permite realizar operações de controle, como cancelamento de passagens. */
         ?>
     </div>
 
-    <script>
-        function cancelarPassagem(passagemID) {
-            // Adicione aqui a lógica para cancelar a passagem no lado do cliente ou chame uma função no backend
-            alert("Passagem com ID " + passagemID + " cancelada com sucesso!");
-        }
-    </script>
-
     <?php
     // Função para obter opções de cidades do banco de dados
     function obterOpcoesCidades() {
         // Conectar ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'test');
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
 
         // Verificar a conexão
         if ($mysqli->connect_error) {

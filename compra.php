@@ -107,7 +107,7 @@
         // Verifica se os campos obrigatórios foram preenchidos
         if (!empty($_POST["nome"]) && !empty($_POST["CPF"]) && !empty($_POST["poltrona"]) && !empty($_POST["pagamento"])) {
             // Conectar ao banco de dados
-            $mysqli = new mysqli('localhost', 'root', '', 'test');
+            $mysqli = new mysqli('localhost', 'root', '', 'mydb');
 
             // Verificar a conexão
             if ($mysqli->connect_error) {
@@ -199,7 +199,7 @@
     // Função para obter opções de cidades do banco de dados
     function obterOpcoesCidades() {
         // Conectar ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'test');
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
 
         // Verificar a conexão
         if ($mysqli->connect_error) {

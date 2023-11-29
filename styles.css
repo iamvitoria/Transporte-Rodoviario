@@ -9,23 +9,31 @@
 }
 
 body {
-    background: #F5F5F5;
+    background: #5024D1;
+    width: 1280px;
+    height: 832px;
 }
 
 .title-container {
     background-color: #F5F5F5;
-    padding: 60px 100px; /* Ajuste conforme necessário */
+    padding-top: 60px;
+    padding-bottom: 60px;
+    padding-left: 100px;
+    padding-right: 100px;
+    margin-top: 60px;
+    margin-left: 220px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: column; /* Para centralizar os elementos verticalmente */
 }
 
 .title-container h1 {
     color: #5024D1;
     font-family: Inknut Antiqua;
     font-size: 60px;
-    font-weight: 400;
+    font-weight: 400px;
     text-align: center;
 }
 
@@ -43,14 +51,14 @@ body {
     padding: 10px;
     font-family: Inknut Antiqua;
     font-size: 15px;
-    color: white;
+    color: white; /* Define a cor do texto nos campos */
     margin-right: 40px;
     border-radius: 5px;
 }
 
 .title-container input[type="text"]::placeholder,
 .title-container input[type="date"]::placeholder {
-    color: white;
+    color: white; /* Define a cor do texto de placeholder */
 }
 
 .title-container input[type="submit"] {
@@ -89,27 +97,26 @@ body {
 }
 
 img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 50px;
+    max-width: 100%; /* Define a largura máxima da imagem para se ajustar ao contêiner */
+    height: auto; /* Mantém a proporção de aspecto da imagem */
+    margin-top: 50px; /* Adiciona margem superior para espaçamento */
     margin-left: 240px;
 }
 
-.viagem, .compra {
+.viagem {
     background-color: #F5F5F5;
     margin-top: 70px;
     margin-left: 220px;
-    width: calc(100% - 440px); /* Ajuste conforme necessário */
+    width: 1060px;
     padding: 10px;
 }
 
 .viagem p {
-    color: white;
+    color: white; /* Cor do texto dentro da classe .viagem */
     margin-right: 10px;
 }
 
-.viagem input[type='submit'],
-.compra input[type='submit'] {
+.viagem input[type='submit']{
     background-color: #F5F5F5;
     color: #5024D1;
     font-family: Inknut Antiqua;
@@ -117,4 +124,189 @@ img {
     padding: 12px 30px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.corpo {
+    background-color: #5024D1;
+    padding: 20px; /* Ajuste conforme necessário */
+    margin: 10px; /* Ajuste conforme necessário */
+    display: flex;
+    justify-content: space-between; /* Distribui os elementos horizontalmente */
+    align-items: center;
+}
+
+.corpo select {
+    width: 100%;
+    height: 42px;
+    padding: 10px;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    color: white;
+    margin-bottom: 5px;
+    margin-right: 40px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5024D1;
+    appearance: none;
+    cursor: pointer;
+}
+
+.compra {
+    background-color: #F5F5F5;
+    margin-top: 70px;
+    margin-left: 220px;
+    width: 1060px;
+    padding: 10px;
+    display: flex;
+}
+
+.compra .search {
+    flex: 1; /* Ocupa o espaço disponível */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compra img {
+    margin-right: 250px;
+    width: 250px;
+}
+
+.compra h1 {
+    color: #5024D1;
+    font-family: Inknut Antiqua;
+    font-size: 60px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.compra form {
+    margin-top: 25px;    
+    margin-right: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.compra input[type="text"] {
+    background-color: #5024D1;
+    padding: 10px;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    color: white;
+    margin-bottom: 10px; /* Adicionado margin-bottom para espaçamento entre os campos */
+    border: none;
+    border-radius: 5px;
+}
+
+.compra input[type="text"]::placeholder {
+    color: white;
+}
+
+/* Estilos para o select */
+.compra select {
+    width: 100%; /* Define a largura como 100% para igualar ao input */
+    padding: 10px;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    color: white;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5024D1;
+    appearance: none; /* Remove as setas padrão nos navegadores */
+    cursor: pointer;
+}
+
+/* Estilos para as opções do select */
+.compra select option {
+    background-color: #5024D1;
+    color: white;
+}
+
+/* Estilo para a opção selecionada */
+.compra select option:checked {
+    background-color: #F5F5F5;
+    color: #5024D1;
+}
+
+.compra input[type="submit"] {
+    background-color: #5024D1;
+    color: white;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.adicionar-viagem {
+    background-color: #F5F5F5;
+    margin-top: 70px;
+    margin-left: 220px;
+    width: 1060px;
+    padding: 10px;
+    padding-bottom: 10px;
+}
+
+.adicionar-viagem h2 {
+    color: #5024D1;
+    font-family: Inknut Antiqua;
+    font-size: 40px;
+    font-weight: 400;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.adicionar-viagem form {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os elementos quebrem para a próxima linha quando não houver espaço suficiente */
+    justify-content: space-between; /* Distribui os elementos horizontalmente */
+    align-items: center;
+}
+
+.adicionar-viagem .form-group {
+    width: 48%; /* Define a largura para ocupar quase metade do contêiner, deixando um pequeno espaço entre os elementos */
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.adicionar-viagem label {
+    display: block; /* Garante que as etiquetas ocupem toda a largura do contêiner pai */
+    color: #5024D1;
+    font-family: Inknut Antiqua;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.adicionar-viagem input[type="datetime-local"],
+.adicionar-viagem input[type="time"],
+.adicionar-viagem input[type="text"],
+.adicionar-viagem select {
+    width: 100%; /* Define a largura como 100% para ocupar toda a largura do contêiner pai */
+    padding: 10px;
+    font-family: Inknut Antiqua;
+    font-size: 15px;
+    color: #5024D1;
+    margin-bottom: 10px;
+    border: 1px solid #5024D1;
+    border-radius: 5px;
+}
+
+.adicionar-viagem input[type="datetime-local"]::placeholder,
+.adicionar-viagem input[type="time"]::placeholder,
+.adicionar-viagem input[type="text"]::placeholder,
+.adicionar-viagem select::placeholder {
+    color: #5024D1;
+}
+
+.adicionar-viagem input[type="submit"] {
+    background-color: #5024D1;
+    color: white;
+    border-radius: 5px;
+    padding: 12px 30px;
+    cursor: pointer;
+    width: 48%;
 }

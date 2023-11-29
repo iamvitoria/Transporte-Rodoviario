@@ -1,8 +1,3 @@
-<?php
-/* Responsável por exibir um formulário de busca de viagens com campos como origem, destino, data de ida, data de volta, etc.
-Exibe os resultados da busca, mostrando informações sobre as viagens disponíveis.
-Possui links ou botões para redirecionar para a página de viagem.php com os parâmetros da viagem selecionada. */
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +5,7 @@ Possui links ou botões para redirecionar para a página de viagem.php com os pa
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transporte Rodoviário</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <style>
+<style>
         .dropdown {
             position: relative;
             display: inline-block;
@@ -58,19 +53,18 @@ Possui links ou botões para redirecionar para a página de viagem.php com os pa
         <a href="admin.php">Admin</a>
       </div>
     </div>
-
     <div class="title-container">
         <div class="title">
             <h1>TRANSPORTE RODOVIÁRIO</h1>
         </div>
         <div class="search-container">
-            <form id="formBusca" method="get" action="viagem.php">
+            <form id="formBusca" method="post" action="">
                 <select id="origem" name="origem">
-                    <?php echo obterOpcoesCidades('origem'); ?>
+                    <?php echo obterOpcoesCidades(); ?>
                 </select>
 
                 <select id="destino" name="destino">
-                    <?php echo obterOpcoesCidades('destino'); ?>
+                    <?php echo obterOpcoesCidades(); ?>
                 </select>
 
                 <input type="date" id="ida" name="data_inicio" placeholder="Data de Ida">
@@ -82,11 +76,18 @@ Possui links ou botões para redirecionar para a página de viagem.php com os pa
 
     <img src="viagem.webp" alt="viagem">
 
+    <script>
+        document.getElementById('formBusca').addEventListener('submit', function(e) {
+            e.preventDefault();
+            window.location.href = "viagem.php";
+        });
+    </script>
+
     <?php
     // Função para obter opções de cidades do banco de dados
-    function obterOpcoesCidades($tipo) {
+    function obterOpcoesCidades() {
         // Conectar ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'test');
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
 
         // Verificar a conexão
         if ($mysqli->connect_error) {

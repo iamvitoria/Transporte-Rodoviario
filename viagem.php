@@ -83,7 +83,7 @@ Após a compra, gera bilhetes e atualiza o banco de dados com as informações d
     <div class="viagem">
         <?php
         // Conecte-se ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'test');
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
 
         // Verifique a conexão
         if ($mysqli->connect_error) {
@@ -140,7 +140,7 @@ Após a compra, gera bilhetes e atualiza o banco de dados com as informações d
     // Função para obter opções de cidades do banco de dados
     function obterOpcoesCidades() {
         // Conectar ao banco de dados
-        $mysqli = new mysqli('localhost', 'root', '', 'onibus');
+        $mysqli = new mysqli('localhost', 'root', '', 'mydb');
 
         // Verificar a conexão
         if ($mysqli->connect_error) {
